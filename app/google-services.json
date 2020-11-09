@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "456147066880",
+    "firebase_url": "https://vegetablefruit-f4e95.firebaseio.com",
+    "project_id": "vegetablefruit-f4e95",
+    "storage_bucket": "vegetablefruit-f4e95.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456147066880:android:db0e98dc0e13f0f2d3f8e5",
+        "android_client_info": {
+          "package_name": "com.example.vegetablesfruit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "456147066880-ho2af5o30o4spl1vgrm48f86l1cenitr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQnkaqxc5gBK6NiBMZN9PNJpqD9JLRrdY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "456147066880-ho2af5o30o4spl1vgrm48f86l1cenitr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
