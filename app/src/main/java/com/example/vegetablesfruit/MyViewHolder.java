@@ -14,41 +14,34 @@ import com.squareup.picasso.Picasso;
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
 
-    TextView fruitNamess, price;
-    ImageView imagePic;
+    TextView catogoriesTypes;
+    ImageView imagePic, move_arrow;
     View v;
     EditText quantity;
 
-    Button btn_update;
+
+
 
 
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);
         v = itemView;
 
-        fruitNamess = v.findViewById(R.id.fruitName);
-        quantity = v.findViewById(R.id.edt_quantity);
-        price = v.findViewById(R.id.price);
+        catogoriesTypes = v.findViewById(R.id.types);
+
         imagePic = v.findViewById(R.id.imagePic);
-        btn_update = v.findViewById(R.id.btn_update);
+        move_arrow = v.findViewById(R.id.move_arrow);
+
 
 
     }
 
-    public void setFruitName(String fruitNames) {
-        fruitNamess =  v.findViewById(R.id.fruitName);
-        fruitNamess.setText(fruitNames);
+    public void setNames(String Types) {
+        catogoriesTypes =  v.findViewById(R.id.types);
+        catogoriesTypes.setText(Types);
     }
 
-    public void setQuantity(String quants) {
-        quantity = v.findViewById(R.id.edt_quantity);
-        quantity.setText(quants);
-    }
 
-    public void setPrice(String prices) {
-        price = v.findViewById(R.id.price);
-        price.setText("Prices: " + prices);
-    }
 
     public void setImagePic(String imagePics, Context context) {
         imagePic = v.findViewById(R.id.imagePic);

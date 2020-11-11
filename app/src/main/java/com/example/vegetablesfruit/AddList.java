@@ -10,9 +10,12 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,7 +36,7 @@ import java.util.Map;
 
 import id.zelory.compressor.Compressor;
 
-public class AddList extends AppCompatActivity {
+public class AddList extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
 
     EditText edt_name, edt_price, edt_quantity;
@@ -52,6 +55,12 @@ public class AddList extends AppCompatActivity {
 
     ProgressDialog mProgress;
 
+
+    Spinner category;
+
+    String[] catgeory = {"LeafyVegetables", "Fruits"};
+    String catogryName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,10 +69,20 @@ public class AddList extends AppCompatActivity {
 
         edt_name = findViewById(R.id.edt_addName);
         edt_price = findViewById(R.id.edt_addPrice);
-        edt_quantity = findViewById(R.id.edt_addQuantity);
+
         btn_addList = findViewById(R.id.btn_add_item);
         addPic = findViewById(R.id.addPic);
 
+        mProgress = new ProgressDialog(this);
+        mProgress.setCanceledOnTouchOutside(false);
+        mProgress.setTitle("Adding...");
+
+        category = findViewById(R.id.spinner_category);
+
+        final ArrayAdapter<String> Class = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, catgeory);
+        Class.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        category.setAdapter(Class);
+        category.setOnItemSelectedListener(this);
 
         mStudentStorageRef = FirebaseStorage.getInstance().getReference();
         addPic.setOnClickListener(new View.OnClickListener() {
@@ -83,57 +102,65 @@ public class AddList extends AppCompatActivity {
             public void onClick(View v) {
 
 
-
+                mProgress.show();
 
                 name = edt_name.getText().toString();
                 price = edt_price.getText().toString();
-                quantity = edt_quantity.getText().toString();
 
 
-                mRef = FirebaseDatabase.getInstance().getReference().child("data").child(name);
+
+
+                mRef = FirebaseDatabase.getInstance().getReference().child("mart").child(catogryName).child(name);
                 final StorageReference thumb_filepath = mStudentStorageRef.child("/fruit_pic").child(name + ".jpg");
                 HashMap<String, String> addItem = new HashMap<>();
                 addItem.put("Name", name);
                 addItem.put("price", price);
-                addItem.put("quantity", quantity);
+
 
                 mRef.setValue(addItem).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            UploadTask uploadTask = thumb_filepath.putBytes(thumb_bite);
-                            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        thumb_filepath.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Uri> task) {
-                                                imageUrl = task.getResult().toString();
-                                                Map images = new HashMap<>();
-                                                images.put("image", imageUrl);
-                                                mRef.updateChildren(images).addOnCompleteListener(new OnCompleteListener() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task task) {
-                                                        if (task.isSuccessful()) {
-                                                            Toast.makeText(AddList.this, "please wait", Toast.LENGTH_SHORT).show();
-                                                            Toast.makeText(AddList.this, "images uploaded", Toast.LENGTH_SHORT).show();
-                                                             addPic.setImageResource(R.mipmap.ic_launcher);
-                                                        } else {
-                                                            Toast.makeText(AddList.this, "error images", Toast.LENGTH_SHORT).show();
+                            try{
+                                UploadTask uploadTask = thumb_filepath.putBytes(thumb_bite);
+                                uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            thumb_filepath.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Uri> task) {
+                                                    imageUrl = task.getResult().toString();
+                                                    Map images = new HashMap<>();
+                                                    images.put("image", imageUrl);
+                                                    mRef.updateChildren(images).addOnCompleteListener(new OnCompleteListener() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task task) {
+                                                            if (task.isSuccessful()) {
+                                                                mProgress.dismiss();
+                                                                Toast.makeText(AddList.this, "please wait", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(AddList.this, "images uploaded", Toast.LENGTH_SHORT).show();
+                                                                addPic.setImageResource(R.mipmap.ic_launcher);
+                                                            } else {
+                                                                Toast.makeText(AddList.this, "error images", Toast.LENGTH_SHORT).show();
+                                                            }
                                                         }
-                                                    }
-                                                });
-                                            }
-                                        });
+                                                    });
+                                                }
+                                            });
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }catch (Exception e){
+
+                            }
+
                             edt_name.setText("");
                             edt_price.setText("");
                             edt_quantity.setText("");
                             Toast.makeText(AddList.this, "data added", Toast.LENGTH_SHORT).show();
                         } else {
+                            mProgress.hide();
                             Toast.makeText(AddList.this, " data " +
                                     "not added", Toast.LENGTH_SHORT).show();
                         }
@@ -185,6 +212,16 @@ public class AddList extends AppCompatActivity {
             }
         }
 
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        catogryName = catgeory[position];
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }

@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
-    >
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -21,24 +18,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#59BEE30C"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:padding="16dp"
             >
 
-            <ImageView
-                android:id="@+id/imagePic"
-                android:layout_width="100dp"
-                android:layout_height="80dp"
 
-                android:gravity="center"
-                android:src="@mipmap/ic_launcher"
-
-
-                android:textSize="20sp"
-                android:textStyle="bold|italic" />
 
             <TextView
-                android:id="@+id/types"
+                android:id="@+id/cartItemName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="fruits"
@@ -49,13 +36,31 @@
 
                 />
 
-            <ImageView
-                android:id="@+id/move_arrow"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/arrow"
+            <TextView
+                android:id="@+id/cartItemQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="quantity"
+                android:textSize="20sp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+
+
                 />
+
+            <TextView
+                android:id="@+id/cartItemPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price"
+                android:textSize="20sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+
+
+                />
+
+
 
 
 
@@ -66,4 +71,4 @@
 
     </androidx.cardview.widget.CardView>
 
-</RelativeLayout>
+</LinearLayout>

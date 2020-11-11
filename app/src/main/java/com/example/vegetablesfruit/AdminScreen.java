@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -47,6 +48,7 @@ public class AdminScreen extends AppCompatActivity {
 
     Button btn_add;
     Toolbar toolbar;
+    ProgressDialog mProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,9 @@ public class AdminScreen extends AppCompatActivity {
         toolbar.setTitleTextColor(Color.BLACK);
         getSupportActionBar().setTitle("List");
 
+        mProgress = new ProgressDialog(this);
+        mProgress.setCanceledOnTouchOutside(false);
+        mProgress.setTitle("updating....");
 
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +79,7 @@ public class AdminScreen extends AppCompatActivity {
         mRecyclerFruit = findViewById(R.id.recyclerView_admin);
         mRecyclerFruit.setLayoutManager(new LinearLayoutManager(this));
 
-        mRef = FirebaseDatabase.getInstance().getReference().child("data");
+        mRef = FirebaseDatabase.getInstance().getReference().child("categories");
         Query query = mRef;
 
 
@@ -82,87 +87,23 @@ public class AdminScreen extends AppCompatActivity {
         adapter = new FirebaseRecyclerAdapter<ContentData, MyViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull final MyViewHolder holder, int position, @NonNull final ContentData model) {
-                holder.setFruitName(model.getNames());
-                holder.setPrice(model.getPrices());
-                holder.setQuantity(model.getQuantitys());
+                holder.setNames(model.getNamess());
                 holder.setImagePic(model.getImages(), getApplicationContext());
 
-                if (ConnectingReceview.checkConnection(getApplicationContext())) {
-                    // Its Available...
-                    holder.v.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            Snackbar snackbar
-                                    = Snackbar
-                                    .make(
-                                            v,
-                                            "do you want to delete the item?",
-                                            Snackbar.LENGTH_LONG)
-                                    .setAction(
-                                            "Ok",
-
-                                            // If the Undo button
-                                            // is pressed, show
-                                            // the message using Toast
-                                            new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view)
-                                                {
-                                                    mDeleteRef = FirebaseDatabase.getInstance().getReference().child("data").child(model.getNames());
-                                                    mDeleteRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                            if(task.isSuccessful()){
-                                                                Toast.makeText(AdminScreen.this, "deleted", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        }
-                                                    });
-
-                                                }
-                                            });
-
-                            snackbar.show();
-
-                        }
-                    });
-                } else {
-                    // Not Available...
-                    Toast.makeText(getApplicationContext(), "Connect to internet", Toast.LENGTH_SHORT).show();
-                }
 
 
-                holder.btn_update.setOnClickListener(new View.OnClickListener() {
+
+                final String catogeryName = getRef(position).getKey();
+                holder.move_arrow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        if (ConnectingReceview.checkConnection(getApplicationContext())) {
-                            // Its Available...
-                            Map AdminPickUp = new HashMap<>();
-
-                            AdminPickUp.put("quantity", holder.quantity.getText().toString());
-
-
-                            mAdmin = FirebaseDatabase.getInstance().getReference().child("data").child(model.getNames());
-                            mAdmin.updateChildren(AdminPickUp).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(getApplicationContext(), "updated", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                        } else {
-                            // Not Available...
-                            Toast.makeText(getApplicationContext(), "Connect to internet", Toast.LENGTH_SHORT).show();
-                        }
-
-
-
+                        Intent intent = new Intent(getApplicationContext(),List.class);
+                        intent.putExtra("name", catogeryName);
+                        intent.putExtra("admin", 1);
+                        startActivity(intent);
                     }
                 });
-
-
 
             }
 

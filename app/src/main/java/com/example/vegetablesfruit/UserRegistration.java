@@ -48,8 +48,14 @@ public class UserRegistration extends AppCompatActivity {
         setSupportActionBar(mToolbarAddUpdates);
         mAuth = FirebaseAuth.getInstance();
 
+
         mToolbarAddUpdates.setTitleTextColor(Color.BLACK);
         getSupportActionBar().setTitle("Users Registration");
+
+        mProgress = new ProgressDialog(this);
+        mProgress.setCanceledOnTouchOutside(false);
+        mProgress.setTitle("Registering");
+        mProgress.setMessage("Please wait....");
 
         edt_userReg_email = findViewById(R.id. edt_user_registration_email);
         edt_userReg_Pass = findViewById(R.id.edt_user_registration_password);
@@ -60,7 +66,7 @@ public class UserRegistration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
+mProgress.show();
 
                 mail = edt_userReg_email.getText().toString();
                 pass = edt_userReg_Pass.getText().toString();
@@ -78,13 +84,16 @@ public class UserRegistration extends AppCompatActivity {
                             edt_userReg_Pass.setText("");
                         } else {
                             // Not Available...
+                            mProgress.hide();
                             Toast.makeText(getApplicationContext(), "Connect to internet", Toast.LENGTH_SHORT).show();
                         }
 
                     }else {
+                        mProgress.hide();
                         Toast.makeText(UserRegistration.this, "Password and confirm Password doesn't match", Toast.LENGTH_SHORT).show();
                     }
                 }else {
+                    mProgress.hide();
                     Toast.makeText(UserRegistration.this, "empty fields", Toast.LENGTH_SHORT).show();
                 }
 
@@ -129,6 +138,7 @@ public class UserRegistration extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            mProgress.dismiss();
 
                             Toast.makeText(UserRegistration.this, "registered", Toast.LENGTH_SHORT).show();
 
@@ -140,6 +150,7 @@ startActivity(registeedIntent);
 
                         } else {
                             // If sign in fails, display a message to the user.
+                            mProgress.hide();
                             Toast.makeText(UserRegistration.this, "already present", Toast.LENGTH_SHORT).show();
 
                         }

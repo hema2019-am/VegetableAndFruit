@@ -50,6 +50,10 @@ public class AdminActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         mAuth = FirebaseAuth.getInstance();
 
+        mProgress = new ProgressDialog(this);
+        mProgress.setCanceledOnTouchOutside(false);
+        mProgress.setTitle("Login...");
+
         mToolbar.setTitleTextColor(Color.BLACK);
         getSupportActionBar().setTitle("Admin Login");
 
@@ -60,7 +64,7 @@ public class AdminActivity extends AppCompatActivity {
 
 
 
-
+mProgress.show();
 
                 adminEmail = edt_admin_email.getText().toString();
                 adminPass = edt_adminPass.getText().toString();
@@ -73,12 +77,14 @@ public class AdminActivity extends AppCompatActivity {
                         edt_admin_email.setText("");
                         edt_adminPass.setText("");
                     }else {
+                        mProgress.hide();
                         Toast.makeText(getApplicationContext(), "empty fields", Toast.LENGTH_SHORT).show();
                     }
 
 
 
                 } else {
+                    mProgress.hide();
                     // Not Available...
                     Toast.makeText(getApplicationContext(), "Connect to internet", Toast.LENGTH_SHORT).show();
                 }
@@ -127,7 +133,7 @@ public class AdminActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-
+mProgress.dismiss();
                     Intent mainScreen = new Intent(getApplicationContext(), AdminScreen.class );
                     startActivity(mainScreen);
 
@@ -137,7 +143,7 @@ public class AdminActivity extends AppCompatActivity {
 
                 } else {
                     // If sign in fails, display a message to the user.
-
+mProgress.hide();
                     Toast.makeText(getApplicationContext(), "Authentication failed.",
                             Toast.LENGTH_SHORT).show();
                 }

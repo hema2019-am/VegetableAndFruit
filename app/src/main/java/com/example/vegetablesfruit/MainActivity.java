@@ -56,7 +56,14 @@ public class MainActivity extends AppCompatActivity {
         mToolbarAddUpdates.setTitleTextColor(Color.BLACK);
         getSupportActionBar().setTitle("Users Login");
 
+        mProgress = new ProgressDialog(this);
+        mProgress.setCanceledOnTouchOutside(false);
+        mProgress.setTitle("login");
+        mProgress.setMessage("Please wait.....");
+
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+
+
 
        mAuth = FirebaseAuth.getInstance();
         edt_email = findViewById(R.id.edt_user_login_email);
@@ -88,15 +95,19 @@ public class MainActivity extends AppCompatActivity {
 
                     if(!userEmail.isEmpty() && !userPass.isEmpty()){
                         Toast.makeText(MainActivity.this, "please wait", Toast.LENGTH_SHORT).show();
+                        mProgress.show();
                         loginUser(userEmail,userPass);
+
 
                         edt_pass.setText("");
                         edt_email.setText("");
                     }else {
+                        mProgress.hide();
                         Toast.makeText(MainActivity.this, "empty fields", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
+                    mProgress.hide();
                     // Not Available...
                     Toast.makeText(getApplicationContext(), "Connect to internet", Toast.LENGTH_SHORT).show();
                 }
@@ -152,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-
+                    mProgress.dismiss();
                     userEmail = edt_email.getText().toString();
                     userPass = edt_pass.getText().toString();
 
@@ -177,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     // If sign in fails, display a message to the user.
-
+mProgress.hide();
                     Toast.makeText(getApplicationContext(), "Authentication failed.",
                             Toast.LENGTH_SHORT).show();
                 }

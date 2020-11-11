@@ -5,28 +5,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainScreen"
+    tools:context=".Cart"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/mainUserAppBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        tools:menu="@menu/menus_list"
-        >
-
-
-
-    </androidx.appcompat.widget.Toolbar>
-
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/cartRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        />
 
-        android:layout_marginTop="15dp"/>
-
+    <Button
+        android:id="@+id/btn_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Order"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        />
 
 </LinearLayout>

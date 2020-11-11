@@ -2,19 +2,23 @@ package com.example.vegetablesfruit;
 
 public class ContentData {
 
-    public String Name,image , price, quantity;
+    public String Name,image, price, quantity;
+
 
     public ContentData(){}
 
-    public ContentData(String Name, String image, String price , String quantity) {
+    public ContentData(String Name, String image, String prices, String quantity) {
         this.Name = Name;
         this.image = image;
-        this.price = price;
+        this.price = prices;
         this.quantity = quantity;
+
 
     }
 
-    public String getNames() {
+
+
+    public String getNamess() {
         return Name;
     }
 
@@ -30,19 +34,20 @@ public class ContentData {
         this.image = image;
     }
 
-    public String getPrices() {
+
+    public String getPrice() {
         return price;
     }
 
-    public void setPrices(String price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public String getQuantitys() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantitys(String quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 }
